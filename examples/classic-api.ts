@@ -1,8 +1,8 @@
 /**
  * Drop-in shape of the RxJS 4 sample. Importing the augment entry installs
- * `observable.and`, `observable.thenDo`, and `Observable.when`.
+ * `observable.and`, `observable.then`, and `Observable.when`.
  *
- * The letter sample is the one from the RxJS 4 `thenDo` docs:
+ * The letter sample is the one from the RxJS 4 `then` docs:
  *   interval(250) with A B C, and interval(300) with a b.
  * Virtual time makes it deterministic.
  *
@@ -21,8 +21,8 @@ const scheduler = new TestScheduler((actual, expected) => {
 
 scheduler.run(({ expectObservable }) => {
   const letters = Observable.when(
-    interval(250).pipe(take(3)).and(of('A', 'B', 'C')).thenDo((n, letter) => `${n}, ${letter}`),
-    interval(300).pipe(take(2)).and(of('a', 'b')).thenDo((n, letter) => `${n}, ${letter}`),
+    interval(250).pipe(take(3)).and(of('A', 'B', 'C')).then((n, letter) => `${n}, ${letter}`),
+    interval(300).pipe(take(2)).and(of('a', 'b')).then((n, letter) => `${n}, ${letter}`),
   );
   expectObservable(letters).toBe('250ms a 49ms b 199ms c 99ms d 149ms (e|)', {
     a: '0, A',
@@ -33,8 +33,8 @@ scheduler.run(({ expectObservable }) => {
   });
 
   const paced = Observable.when(
-    timer(200).and(timer(300)).thenDo(() => 'first'),
-    timer(400).and(timer(500)).thenDo(() => 'second'),
+    timer(200).and(timer(300)).then(() => 'first'),
+    timer(400).and(timer(500)).then(() => 'second'),
   );
   expectObservable(paced).toBe('300ms a 199ms (b|)', { a: 'first', b: 'second' });
 });

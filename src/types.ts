@@ -14,7 +14,7 @@ export interface QueuedNotification {
 export type JoinSource = ObservableInput<unknown>;
 
 /**
- * Plan produced by `thenDo`. Pass one or more plans to `when`.
+ * Plan produced by `then`. Pass one or more plans to `when`.
  * Several plans may share the same source observable; each source value
  * is consumed by at most one matching plan.
  */

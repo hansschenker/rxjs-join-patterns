@@ -11,7 +11,7 @@ const temperature = new Subject<number>();
 const humidity = new Subject<number>();
 
 const comfort = when(
-  and(temperature, humidity).thenDo((degrees, percent) =>
+  and(temperature, humidity).then((degrees, percent) =>
     degrees >= 30 && percent >= 70 ? `muggy ${degrees}C / ${percent}%` : `ok ${degrees}C / ${percent}%`,
   ),
 );

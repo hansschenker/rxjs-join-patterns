@@ -1,30 +1,30 @@
-import type { ObservableInput } from 'rxjs';
-import type { PlanImpl } from './plan.js';
-import type { Pattern } from './pattern.js';
+import type { Pattern2 } from './pattern.js';
 import type { Plan } from './types.js';
 import { installJoinPatterns } from './install.js';
 
 declare module 'rxjs' {
   interface Observable<T> {
     /**
-     * RxJS 4 join pattern. Matches when both sequences have an available value.
-     * Requires `installJoinPatterns()` (the augment entry calls it on import).
+     * Matches when both sequences have an available value.
+     * Requires `installJoinPatterns()` (this module calls it on import).
      */
-    and<U>(other: ObservableInput<U>): Pattern<[T, U]>;
+    and<T2>(other: Observable<T2>): Pattern2<T, T2>;
     /**
-     * RxJS 4 join pattern. Matches when this sequence has an available value.
+     * Matches when this sequence has an available value and projects it.
      * Requires `installJoinPatterns()`.
      */
-    thenDo<R>(selector: (value: T) => R): PlanImpl<R>;
+    then<TR>(selector: (item1: T) => TR): Plan<TR>;
   }
 
   namespace Observable {
     /**
-     * RxJS 4 join pattern. Join plans created with `and` / `thenDo`.
-     * Requires `installJoinPatterns()`.
+     * Join plans created with `and` / `then`.
+     * One plan matches the DefinitelyTyped signature. Further plans are the
+     * RxJS runtime: each value is consumed by at most one matching plan.
      */
-    function when<R>(...plans: Array<Plan<R>>): Observable<R>;
-    function when<R>(plans: readonly Plan<R>[]): Observable<R>;
+    function when<TR>(plan: Plan<TR>): Observable<TR>;
+    function when<TR>(plan1: Plan<TR>, plan2: Plan<TR>, ...rest: Array<Plan<TR>>): Observable<TR>;
+    function when<TR>(plans: readonly Plan<TR>[]): Observable<TR>;
   }
 }
 

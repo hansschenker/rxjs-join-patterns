@@ -20,8 +20,8 @@ const scheduler = new TestScheduler((actual, expected) => {
 
 scheduler.run(({ expectObservable }) => {
   const source = when(
-    and(timer(100), timer(500)).thenDo(() => 'first'),
-    and(timer(400), timer(300)).thenDo(() => 'second'),
+    and(timer(100), timer(500)).then(() => 'first'),
+    and(timer(400), timer(300)).then(() => 'second'),
   );
 
   // 400ms: 'second'. 100ms later (frame 500): 'first' and complete.

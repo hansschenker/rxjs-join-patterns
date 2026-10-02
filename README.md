@@ -1,8 +1,8 @@
 # rxjs-join-patterns
 
-RxJS 4 **join patterns** for **RxJS 7.8.2**.
+RxJS **join patterns** for **RxJS 7.8.2**, with the DefinitelyTyped shapes `Pattern1` … `Pattern9`, `and`, `then`, and `Observable.when`.
 
-`and` / `thenDo` / `when` were removed after RxJS 4. This package brings that join calculus back: several plans can share sources, and each source value is consumed by at most one matching plan.
+`and` / `then` / `when` were removed after RxJS 4. This package brings that join calculus back: several plans can share sources, and each source value is consumed by at most one matching plan. `Pattern9` is the end of the chain (nine sources) and has no further `and`.
 
 This is **not** the time-window [`join`](https://rxjs.dev/api/operators/join) / `groupJoin` operator. RxJS 7 still includes those.
 
@@ -24,7 +24,7 @@ const temperature = new Subject<number>();
 const humidity = new Subject<number>();
 
 const comfort = when(
-  and(temperature, humidity).thenDo((degrees, percent) =>
+  and(temperature, humidity).then((degrees, percent) =>
     degrees >= 30 && percent >= 70
       ? `muggy ${degrees}C / ${percent}%`
       : `ok ${degrees}C / ${percent}%`,
@@ -50,9 +50,9 @@ const ys = new Subject<number>();
 const zs = new Subject<number>();
 
 const joined = when(
-  and(xs, ys).thenDo((x, y) => `${x} + ${y} = ${x + y}`),
-  and(xs, zs).thenDo((x, z) => `${x} * ${z} = ${x * z}`),
-  and(ys, zs).thenDo((y, z) => `${y} - ${z} = ${y - z}`),
+  and(xs, ys).then((x, y) => `${x} + ${y} = ${x + y}`),
+  and(xs, zs).then((x, z) => `${x} * ${z} = ${x * z}`),
+  and(ys, zs).then((y, z) => `${y} - ${z} = ${y - z}`),
 );
 
 joined.subscribe(console.log);
@@ -77,15 +77,15 @@ Chain form, equivalent to the old `xs.and(ys).and(zs)`:
 ```ts
 import { pattern, when } from 'rxjs-join-patterns';
 
-when(pattern(xs).and(ys).and(zs).thenDo((x, y, z) => x + y + z));
+when(pattern(xs).and(ys).and(zs).then((x, y, z) => x + y + z));
 ```
 
-One source, the old `xs.thenDo(...)`:
+One source, the old `xs.then(...)`:
 
 ```ts
-import { thenDo, when } from 'rxjs-join-patterns';
+import { then, when } from 'rxjs-join-patterns';
 
-when(thenDo(xs, (value) => value * 2));
+when(then(xs, (value) => value * 2));
 ```
 
 `when` also accepts an array of plans: `when([planA, planB])`.
@@ -99,8 +99,8 @@ import { Observable, timer } from 'rxjs';
 import 'rxjs-join-patterns/augment';
 
 Observable.when(
-  timer(100).and(timer(500)).thenDo(() => 'first'),
-  timer(400).and(timer(300)).thenDo(() => 'second'),
+  timer(100).and(timer(500)).then(() => 'first'),
+  timer(400).and(timer(300)).then(() => 'second'),
 ).subscribe(console.log);
 // second
 // first
@@ -128,9 +128,9 @@ const eat = (index: number) => () => {
 };
 
 const dining = when(
-  and(hungry[0], chopsticks[0], chopsticks[1]).thenDo(eat(0)),
-  and(hungry[1], chopsticks[1], chopsticks[2]).thenDo(eat(1)),
-  and(hungry[2], chopsticks[2], chopsticks[0]).thenDo(eat(2)),
+  and(hungry[0], chopsticks[0], chopsticks[1]).then(eat(0)),
+  and(hungry[1], chopsticks[1], chopsticks[2]).then(eat(1)),
+  and(hungry[2], chopsticks[2], chopsticks[0]).then(eat(2)),
 );
 
 dining.subscribe(console.log);
@@ -156,7 +156,7 @@ hungry.forEach((philosopher) => philosopher.next({}));
 | [examples/multiple-plans.ts](examples/multiple-plans.ts) | Three competing plans |
 | [examples/timers.ts](examples/timers.ts) | The RxJS 4 timer / `when` sample |
 | [examples/dining-philosophers.ts](examples/dining-philosophers.ts) | Chopsticks, with virtual time |
-| [examples/classic-api.ts](examples/classic-api.ts) | `Observable.prototype.and` / `thenDo` |
+| [examples/classic-api.ts](examples/classic-api.ts) | `Observable.prototype.and` / `then` |
 
 ```bash
 npm install
@@ -167,12 +167,12 @@ npm run build
 
 ## API
 
-- `and(...sources)` — pattern over those observables (up to a typed tuple).
-- `pattern(source).and(other)` — the same pattern, built by chaining.
-- `pattern.thenDo(selector)` / `thenDo(source, selector)` — turn a pattern into a plan.
-- `when(...plans)` / `when(plans)` — observable of selector results.
-- `installJoinPatterns()` — add `.and`, `.thenDo`, and `Observable.when`.
+- `and(...)` — `Pattern1` through `Pattern9`, by argument count (nine sources maximum).
+- `pattern(source).and(other).then(selector)` — the same chain as `observable.and(other).then(selector)`.
+- `then(source, selector)` — a plan from one observable, the `Pattern1` case.
+- `when(plan)` / `when(plan, ...more)` / `when([plans])` — observable of selector results. One plan matches the DefinitelyTyped `ObservableStatic.when`; extra plans are how the RxJS runtime joins alternatives.
+- `installJoinPatterns()` — add `observable.and`, `observable.then`, and `Observable.when`. Importing `rxjs-join-patterns/augment` does this for you.
 
 ## Credit
 
-Algorithm and the original samples come from RxJS 4 join patterns (`src/core/joins`, `Observable.when`, `Observable.prototype.and`, `Pattern.prototype.thenDo`), licensed Apache-2.0. See [NOTICE](NOTICE).
+Algorithm and samples come from RxJS 4 join patterns. The public types follow the DefinitelyTyped RxJS-Join definitions (`Pattern1`–`Pattern9`, `Observable.and`, `Observable.then`, `Observable.when`) by Igor Oleinikov. See [NOTICE](NOTICE).

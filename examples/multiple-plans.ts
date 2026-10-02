@@ -21,9 +21,9 @@ const ys = new Subject<number>();
 const zs = new Subject<number>();
 
 const joined = when(
-  and(xs, ys).thenDo((x, y) => `${x} + ${y} = ${x + y}`),
-  and(xs, zs).thenDo((x, z) => `${x} * ${z} = ${x * z}`),
-  and(ys, zs).thenDo((y, z) => `${y} - ${z} = ${y - z}`),
+  and(xs, ys).then((x, y) => `${x} + ${y} = ${x + y}`),
+  and(xs, zs).then((x, z) => `${x} * ${z} = ${x * z}`),
+  and(ys, zs).then((y, z) => `${y} - ${z} = ${y - z}`),
 );
 
 const seen: string[] = [];

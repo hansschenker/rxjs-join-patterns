@@ -15,8 +15,8 @@ function asPlans<R>(plans: readonly Plan<R>[]): PlanImpl<R>[] {
   return plans.map((plan, index) => {
     if (!(plan instanceof PlanImpl)) {
       throw new TypeError(
-        `when() expected a plan from thenDo() at index ${index}. ` +
-          'Build one with and(sourceA, sourceB).thenDo(selector) or pattern(source).thenDo(selector).',
+        `when() expected a plan from then() at index ${index}. ` +
+          'Build one with and(sourceA, sourceB).then(selector) or pattern(source).then(selector).',
       );
     }
     return plan;

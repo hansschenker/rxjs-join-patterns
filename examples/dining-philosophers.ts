@@ -51,9 +51,9 @@ const eat = (index: number) => () => {
 };
 
 const dining = when(
-  and(hungry[0]!, chopsticks[0]!, chopsticks[1]!).thenDo(eat(0)),
-  and(hungry[1]!, chopsticks[1]!, chopsticks[2]!).thenDo(eat(1)),
-  and(hungry[2]!, chopsticks[2]!, chopsticks[0]!).thenDo(eat(2)),
+  and(hungry[0]!, chopsticks[0]!, chopsticks[1]!).then(eat(0)),
+  and(hungry[1]!, chopsticks[1]!, chopsticks[2]!).then(eat(1)),
+  and(hungry[2]!, chopsticks[2]!, chopsticks[0]!).then(eat(2)),
 );
 
 dining.subscribe((event) => {
