@@ -1,0 +1,55 @@
+{
+  "name": "rxjs-join-patterns",
+  "version": "1.0.0",
+  "description": "RxJS 4 join patterns (and, thenDo, when) for RxJS 7.8.2",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./augment": {
+      "types": "./dist/augment.d.ts",
+      "import": "./dist/augment.js"
+    }
+  },
+  "files": [
+    "dist",
+    "examples",
+    "README.md",
+    "LICENSE",
+    "NOTICE"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit && tsc -p tsconfig.examples.json --noEmit",
+    "test": "tsx --test test/*.test.ts",
+    "examples": "tsx examples/basic.ts && tsx examples/multiple-plans.ts && tsx examples/timers.ts && tsx examples/dining-philosophers.ts && tsx examples/classic-api.ts"
+  },
+  "peerDependencies": {
+    "rxjs": "7.8.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "rxjs": "7.8.2",
+    "tsx": "^4.19.2",
+    "typescript": "^5.6.3"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hansschenker/rxjs-join-patterns.git"
+  },
+  "keywords": [
+    "rxjs",
+    "join-patterns",
+    "and",
+    "thenDo",
+    "when"
+  ]
+}

@@ -1,0 +1,14 @@
+rxjs-join-patterns
+Copyright 2026 Hans Schenker
+
+This product includes a TypeScript port of the RxJS 4 join-pattern calculus
+(and / thenDo / when), derived from Reactive-Extensions/RxJS:
+
+  https://github.com/Reactive-Extensions/RxJS
+  src/core/joins/*
+  src/core/linq/observable/when.js
+  src/core/linq/observable/and.js
+  tests/observable/when.js
+
+That work is Copyright (c) Microsoft Open Technologies, Inc., Microsoft Corporation,
+and other RxJS contributors, and is licensed under the Apache License, Version 2.0.
